@@ -1,3 +1,25 @@
+.container {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .container select {
     background-color: rgb(69, 69, 65);
+}
+
+.container input {
+    background-color: rgb(69, 69, 65) ;
+}
+
+.container button {
+    background-color: rgb(43, 42, 42);
+    padding: .3em;
+    border-radius: 10px;
+}
+
+.box {
+    background-color: rgb(42, 42, 42);
+    padding: 1em;
 }
