@@ -1,6 +1,6 @@
 .container{
     padding: 1em;
-    background-color: rgb(38, 57, 39);
+    background-color: rgb(151, 220, 255);
 }
 
 .container ul{
@@ -20,5 +20,15 @@
 }
 
 .link:hover{
-    color: rgb(202, 202, 150);
+    color: rgb(94, 89, 255);
 }
+
+@media (max-width: 720px) {
+    .container {
+        padding: .4em;
+    }
+
+    .link {
+        font-size: 1.5em;
+    }
+  }
