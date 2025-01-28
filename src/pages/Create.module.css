@@ -6,20 +6,30 @@
 }
 
 .container select {
-    background-color: rgb(69, 69, 65);
+    background-color: rgb(124, 124, 124);
 }
 
 .container input {
-    background-color: rgb(69, 69, 65) ;
+    background-color: rgb(255, 255, 255) ;
+    width: 100%;
 }
 
 .container button {
-    background-color: rgb(43, 42, 42);
+    background-color: #007FFF;
     padding: .3em;
     border-radius: 10px;
+    color: white;
+}
+
+.container button:active {
+    background-color: #2a4ea7;
+    padding: .3em;
+    border-radius: 10px;
+    color: white;
 }
 
 .box {
-    background-color: rgb(42, 42, 42);
+    background-color: #c2e2f7;
     padding: 1em;
+    border-radius: 8px;
 }
