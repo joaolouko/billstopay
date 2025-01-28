@@ -1,8 +1,11 @@
 import { useState } from "react";
 import axios from "axios";
+import styles from './Conta.module.css'
+import Swal from "sweetalert2";
 
-function Conta({cod, nome, tipo, valor, paga: inicialPaga }) {
+function Conta({cod, nome, tipo, mes, ano, valor, paga: inicialPaga }) {
     const [paga, setPaga] = useState(inicialPaga);
+    
 
     const alternarPaga = async () => {
         const novoValor = !paga; // Inverte o valor atual
@@ -12,14 +15,24 @@ function Conta({cod, nome, tipo, valor, paga: inicialPaga }) {
         } catch (error) {
             console.error("Erro ao atualizar conta:", error.message);
         }
+        if (paga) {
+            Swal.fire("conta marcada como não paga!")
+        } else if (!paga) {
+            Swal.fire("conta marcada como paga!")
+        }
+        
     };
     return (
-        <div className="conta-card" style={{ border: "1px solid #ccc", padding: "10px", margin: "10px", borderRadius: "8px" }}>
+        <div className={`${
+            paga ? styles.contaPaga : styles.contaCard
+        }`}>
             <strong>Nome:</strong> {nome} <br />
             <strong>Tipo:</strong> {tipo} <br />
+            <strong>Mês:</strong> {mes} <br />
+            <strong>Ano:</strong> {ano} <br />
             <strong>Valor:</strong> R$ {valor.toFixed(2)} <br />
             <strong>Paga:</strong> {paga ? "Sim" : "Não"} <br />
-            <button
+            <button className={styles.btn}
                 onClick={alternarPaga}
                 style={{
                     padding: "5px 10px",

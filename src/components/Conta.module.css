@@ -1,8 +1,33 @@
-.conta-card {
+.contaCard {
     border: 1px solid #ccc;
     padding: 10px;
     margin: 10px;
     border-radius: 8px;
-    background-color: #f9f9f9;
+    width: 13.8%;
+    background-color: #efefef;
+    transition: all .4s;
 }
 
+.contaPaga{
+    background-color: #969696;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 8px;
+    width: 13.8%;
+    transition: all .4s;
+}
+
+@media (max-width: 720px) {
+    .contaCard {
+        width: 39%;
+    }
+
+    .contaPaga{
+        width: 39%;
+    }
+
+    .btn{
+        font-size: .7em;
+    }
+  }
