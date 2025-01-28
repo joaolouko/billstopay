@@ -1,7 +1,7 @@
-const express = require('express')
-const mysql = require('mysql')
-const bodyParser = require('body-parser')
-const cors = require('cors')
+import express from 'express'
+import mysql from 'mysql'
+import bodyParser from 'body-parser';
+import cors from 'cors'
 
 const app = express();
 app.use(cors())
@@ -33,20 +33,52 @@ app.get('/tipo', (req, res) => {
     })
 })
 
+app.get('/mes', (req, res) => {
+    db.query('select * from mes', (err, results) => {
+        if (err) {
+            res.status(500).json({ error: err.message });
+        } else {
+            res.status(200).json(results);
+            console.log(results)
+        }
+    })
+});
+
+app.get('/ano', (req, res) => {
+    db.query('select * from ano', (err, results) => {
+        if (err) {
+            res.status(500).json({ error: err.message });
+        } else {
+            res.status(200).json(results);
+            console.log(results)
+        }
+    })
+})
+
 app.get("/contas", (req, res) => {
     const sql = `
         SELECT 
             contas.cod, 
             contas.nome, 
             contas.valor, 
-            contas.paga, 
-            tipo.descricao AS tipo
-        FROM 
+            contas.paga,
+            mes.descricao AS mes,
+            tipo.descricao AS tipo,
+            ano.descricao AS ano -- Aqui estamos pegando a descrição do ano da tabela 'ano'
+        FROM
             contas
+        JOIN
+            mes
+        ON
+            contas.mes = mes.cod
         JOIN 
             tipo 
         ON 
             contas.tipo = tipo.cod
+        JOIN
+            ano
+        ON
+            contas.ano = ano.cod 
     `;
 
     db.query(sql, (err, results) => {
@@ -57,6 +89,8 @@ app.get("/contas", (req, res) => {
         res.status(200).json(results);
     });
 });
+
+
 
 app.put("/contas/:cod", (req, res) => {
     const { cod } = req.params;
@@ -78,21 +112,32 @@ app.put("/contas/:cod", (req, res) => {
 });
 
 app.post('/contas', (req, res) => {
-    const {nome, tipoConta, valor, paga} = req.body;
+    const { nome, tipoConta, valor, paga, mes, ano} = req.body;
 
-    if (!nome || !tipoConta || !valor) {
-        return res.status(400).json({ error: "Nome, tipo de conta e valor são obrigatórios" });
+    // Validação de campos obrigatórios
+    if (!nome || !tipoConta || !valor || !mes || !ano) {
+        return res.status(400).json({ 
+            error: "Nome, tipo de conta, valor, mês e ano são obrigatórios." 
+        });
     }
 
-    const sql = "INSERT INTO contas (nome, tipo, valor, paga) VALUES (?, ?, ?, ?)";
-    db.query(sql, [nome, tipoConta, valor, paga], (err, results) => {
+    const sql = "INSERT INTO contas (nome, tipo, valor, paga, mes, ano) VALUES (?, ?, ?, ?, ?, ?)";
+    db.query(sql, [nome, tipoConta, valor, paga || false, mes, ano], (err, results) => {
         if (err) {
             console.error("Erro ao inserir no banco:", err.message);
-            return res.status(500).json({ error: "Erro ao salvar no banco de dados" });
+            return res.status(500).json({ 
+                error: "Erro ao salvar no banco de dados. Verifique os dados enviados." 
+            });
         }
-        res.status(201).json({ message: "Conta cadastrada com sucesso!" });
+
+        // Retornando uma mensagem com o ID da nova conta
+        res.status(201).json({ 
+            message: "Conta cadastrada com sucesso!",
+            contaId: results.insertId // ID da conta recém-criada
+        });
     });
-})
+});
+
 
 const port = 3000;
 
