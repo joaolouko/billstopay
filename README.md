@@ -1,6 +1,6 @@
 # Bills To Pay (Contas a Pagar)
 ![Static Badge](https://img.shields.io/badge/em%20desenvolvimento-green)
-![Static Badge](https://img.shields.io/badge/Bills%20To%20Pay-v1-blue)
+![Static Badge](https://img.shields.io/badge/Bills%20To%20Pay-v1.0-blue)
 ![React.js](https://img.shields.io/badge/React.js-61DAFB?logo=react&logoColor=white)
 ![Node.js](https://img.shields.io/badge/Node.js-339933?logo=node.js&logoColor=white)
 ![MySQL](https://img.shields.io/badge/MySQL-4479A1?logo=mysql&logoColor=white)
