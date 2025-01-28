@@ -9,8 +9,7 @@ function App() {
   return (
     <> 
       
-      <BrowserRouter>
-      
+      <BrowserRouter basename='/bills'>
         <Routes>
           <Route path='/' element={<Main/>} />
           <Route path='/criar' element={<Create/>} />
