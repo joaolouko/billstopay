@@ -5,7 +5,7 @@ import Conta from "../components/Conta";
 import styles from "./main.module.css";
 import Select from "react-select";
 
-const endereco = '192.168.1.106'
+// const endereco = 'IP do seu servidor'  
 
 function Main() {
     const [contas, setContas] = useState([]); // Contas retornadas da API

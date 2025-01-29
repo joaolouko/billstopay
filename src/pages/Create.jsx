@@ -6,7 +6,7 @@ import Swal from "sweetalert2";
 import Select from "react-select";
 import { Button, Input } from "@mui/material";
 
-const endereco = '192.168.1.106'
+// const endereco = 'IP do seu servidor'  
 
 function Create() {
 
