@@ -11,7 +11,7 @@ console.log("DB_NAME:", process.env.DB_NAME);
 console.log("SERVER_IP:", process.env.SERVER_IP);
 
 const app = express();
-app.use(cors())
+app.use(cors({ origin: '*' }));
 app.use(express.json());
 
 const db = mysql.createConnection({
@@ -118,6 +118,28 @@ app.put("/contas/:cod", (req, res) => {
     });
 });
 
+app.put("/editarContas/:cod", (req, res) => {
+    const { cod } = req.params;
+    const { nome, tipo, mes, ano, valor } = req.body;
+
+    console.log("Dados recebidos para edição:", { cod, nome, tipo, mes, ano, valor }); // Debug
+
+    if (!nome || !tipo || !mes || !ano || !valor) {
+        return res.status(400).json({ error: "Todos os campos devem ser preenchidos." });
+    }
+
+    const sql = "UPDATE contas SET nome = ?, tipo = ?, mes = ?, ano = ?, valor = ? WHERE cod = ?";
+    db.query(sql, [nome, tipo, mes, ano, valor, cod], (err, result) => {
+        if (err) {
+            console.error("Erro ao editar conta:", err.message);
+            return res.status(500).json({ error: "Erro ao editar conta." });
+        }
+        res.status(200).json({ message: "Conta atualizada com sucesso!" });
+    });
+})
+
+
+
 app.post('/contas', (req, res) => {
     const { nome, tipoConta, valor, paga, mes, ano} = req.body;
 
@@ -145,6 +167,30 @@ app.post('/contas', (req, res) => {
     });
 });
 
+app.delete("/contas/:cod", (req, res) => {
+    console.log('Rota DELETE chamada'); // Adicione esse log
+    const { cod } = req.params;
+    
+    // Verifica se o código da conta foi passado
+    if (!cod) {
+        return res.status(400).json({ error: "Código da conta não fornecido." });
+    }
+
+    // Deleta a conta com o código especificado
+    const sql = "DELETE FROM contas WHERE cod = ?";
+    db.query(sql, [cod], (err, result) => {
+        if (err) {
+            console.error("Erro ao excluir conta:", err.message);
+            return res.status(500).json({ error: "Erro ao excluir conta." });
+        }
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: "Conta não encontrada." });
+        }
+
+        res.status(200).json({ message: "Conta excluída com sucesso!" });
+    });
+});
 
 const port = 3000;
 
