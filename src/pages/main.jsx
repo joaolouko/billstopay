@@ -4,8 +4,8 @@ import Nav from "../components/layout/Nav";
 import Conta from "../components/Conta";
 import styles from "./main.module.css";
 import Select from "react-select";
+import Swal from "sweetalert2";
 
-// const endereco = 'IP do seu servidor'  
 
 function Main() {
     const [contas, setContas] = useState([]); // Contas retornadas da API
@@ -15,6 +15,9 @@ function Main() {
     const [mesConta, setMesConta] = useState(null); // Mês selecionado
     const [ano, setAno] = useState([]); // Anos retornados da API
     const [anoConta, setAnoConta] = useState(""); // Ano selecionado
+
+    
+    //const endereco = 'IP do servidor'
 
     // Função para buscar contas
     const fetchContas = async () => {
@@ -54,6 +57,38 @@ function Main() {
         fetchMeses();
         fetchAnos();
     }, []);
+
+    const excluirConta = async (cod) => {
+
+        if (typeof cod !== 'string' && typeof cod !== 'number') {
+            console.error('O cod não é válido', cod);
+            return;
+        }
+        
+        // Confirmação de exclusão
+        const resultado = await Swal.fire({
+            title: 'Tem certeza?',
+            text: "Essa ação não pode ser desfeita.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sim, excluir!',
+            cancelButtonText: 'Cancelar'
+        });
+
+        if (resultado.isConfirmed) {
+            try {
+                // Envia a requisição de exclusão para o backend
+                await axios.delete(`http://${endereco}:3000/contas/${cod}`);
+                Swal.fire('Conta excluída!', '', 'success');
+
+                // Atualiza a lista de contas no estado removendo a conta excluída
+                setContas((prevContas) => prevContas.filter(conta => conta.cod !== cod));
+            } catch (error) {
+                console.error("Erro ao excluir conta:", error.message);
+                Swal.fire("Erro ao excluir a conta.", "", "error");
+            }
+        }
+    };
 
     // Formatar os meses para o formato do react-select
     const mesesOptions = [
@@ -128,6 +163,7 @@ function Main() {
                                 paga={conta.paga}
                                 mes={conta.mes} // Mês da conta
                                 ano={conta.ano}
+                                excluirConta={excluirConta} // Passa a função de excluir
                             />
                         ))}
                     
